@@ -25,3 +25,14 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# Dockerize the app
+<ul>
+    <li>touch Dockerfile</li>
+    <li>touch .dockerignore</li>
+    <li>docker build --tag helpdeskapp .</li>
+    <li>Run `docker image ls` and check the existance of `helpdeskapp` image</li>
+    <li>Create nginx.conf file inside nginx folder</li>
+    <li>Run `docker run -d -p 4200:80 --name helpdesk helpdeskapp`</li>
+    <li>Run `docker container ls` and check the existance of `helpdesk` container</li>
+</ul>
