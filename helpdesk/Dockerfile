@@ -1,33 +1,24 @@
 ###### Install dependencies only when needed ######
-FROM node:16-alpine AS builder
+FROM node:latest as build
 
 # Make /app as working directory
-WORKDIR /app
+WORKDIR /usr/local/app
 
 # Copy package.json file
-COPY package.json .
+COPY ./ /usr/local/app
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
-
-# Copy the source code to the /app directory
-COPY . .
+RUN npm install
 
 # Build the application
-RUN npm run build  --output-path=dist  --output-hashing=all
+RUN npm run build
 
 
 ######  Use NgInx alpine image  ###### 
-FROM nginx:stable-alpine
-
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy nginx config file
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+FROM nginx:latest
 
 # Copy dist folder fro build stage to nginx public folder
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=build /usr/local/app/dist/helpdesk /usr/share/nginx/html
 
-# Start NgInx service
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port 80
+EXPOSE 80
